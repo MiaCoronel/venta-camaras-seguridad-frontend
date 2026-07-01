@@ -1,1 +1,65 @@
-<p>login works!</p>
+<div class="login-container">
+
+  <div class="card">
+
+    <h1>Iniciar Sesión</h1>
+
+    <form [formGroup]="loginForm" (ngSubmit)="login()">
+
+      <label>Usuario</label>
+
+      <input
+        type="email"
+        formControlName="username"
+        placeholder="Ingrese su correo">
+
+      @if(loginForm.controls.username.touched &&
+      loginForm.controls.username.invalid){
+
+        <small>
+
+          Ingrese un correo válido.
+
+        </small>
+
+      }
+
+      <label>Contraseña</label>
+
+      <input
+        type="password"
+        formControlName="password"
+        placeholder="********">
+
+      @if(loginForm.controls.password.touched &&
+      loginForm.controls.password.invalid){
+
+        <small>
+
+          La contraseña debe tener mínimo 6 caracteres.
+
+        </small>
+
+      }
+
+      @if(error){
+
+        <p class="error">
+
+          {{ error }}
+
+        </p>
+
+      }
+
+      <button type="submit">
+
+        Ingresar
+
+      </button>
+
+    </form>
+
+  </div>
+
+</div>
