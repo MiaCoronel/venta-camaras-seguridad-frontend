@@ -1,17 +1,17 @@
 import { Routes } from '@angular/router';
-import { HomeComponent } from './pages/home/home';
-import { CamerasComponent } from './pages/cameras/cameras';
-import { CameraDetailComponent } from './pages/camera-detail/camera-detail';
-import { LoginComponent } from './pages/login/login';
-import { RegisterComponent } from './pages/register/register';
-import { CartComponent } from './pages/cart/cart';
+import { Inicio } from './pages/inicio/inicio';
+import { Camaras } from './pages/camaras/camaras';
+import { DetalleCamara } from './pages/detalle-camara/detalle-camara';
+import { Login } from './pages/login/login';
+import { Registro } from './pages/registro/registro';
+import { Carrito } from './pages/carrito/carrito';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'cameras', component: CamerasComponent },
-  { path: 'cameras/:id', component: CameraDetailComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'register', component: RegisterComponent },
-  { path: 'cart', component: CartComponent },
+  { path: '', component: Inicio },
+  { path: 'cameras', component: Camaras },
+  { path: 'cameras/:id', component: DetalleCamara },
+  { path: 'login', component: Login },
+  { path: 'register', component: Registro },
+  { path: 'cart', component: Carrito },
   { path: '**', redirectTo: '' }
 ];
