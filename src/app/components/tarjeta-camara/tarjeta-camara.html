@@ -1,1 +1,10 @@
-<p>tarjeta-camara works!</p>
+<div class="tarjeta">
+  @if (camara().imagenes.length > 0) {
+    <img [src]="camara().imagenes[0].url" [alt]="camara().nombre">
+  }
+
+  <h3>{{ camara().nombre }}</h3>
+  <p class="precio">{{ camara().precio | currency }}</p>
+  
+  <button [routerLink]="['/camaras', camara().id]">Ver Detalle</button>
+</div>

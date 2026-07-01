@@ -1,1 +1,17 @@
-<p>detalle-camara works!</p>
+<section class="detalle">
+  @if (loading()) {
+    <p>Cargando información...</p>
+  }
+
+  @if (error()) {
+    <p class="alerta-error">{{ error() }}</p>
+  }
+
+  @if (camara(); as cam) {
+    <div>
+      <h2>{{ cam.nombre }}</h2>
+      <p>{{ cam.precio | currency }}</p>
+      <p>{{ cam.descripcion }}</p>
+    </div>
+  }
+</section>
