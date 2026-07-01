@@ -5,13 +5,20 @@ import { DetalleCamara } from './pages/detalle-camara/detalle-camara';
 import { Login } from './pages/login/login';
 import { Registro } from './pages/registro/registro';
 import { Carrito } from './pages/carrito/carrito';
+import { Ordenes } from './pages/ordenes/ordenes';
+import { Pagos } from './pages/pagos/pagos';
+import { Resenas } from './pages/resenas/resenas';
+import { authGuard } from './guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', component: Inicio },
-  { path: 'cameras', component: Camaras },
-  { path: 'cameras/:id', component: DetalleCamara },
+  { path: 'camaras', component: Camaras },
+  { path: 'camaras/:id', component: DetalleCamara },
   { path: 'login', component: Login },
-  { path: 'register', component: Registro },
-  { path: 'cart', component: Carrito },
+  { path: 'registro', component: Registro },
+  { path: 'carrito', component: Carrito, canActivate: [authGuard] },
+  { path: 'ordenes', component: Ordenes, canActivate: [authGuard] },
+  { path: 'pagos', component: Pagos, canActivate: [authGuard] },
+  { path: 'resenas', component: Resenas },
   { path: '**', redirectTo: '' }
 ];
