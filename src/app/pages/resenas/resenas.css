@@ -1,0 +1,126 @@
+.pagina-resenas {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  color: #1f2937;
+}
+
+.pagina-resenas h2 {
+  color: #1a1a2e;
+  margin-bottom: 1.5rem;
+}
+
+.selector-camara {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1.5rem;
+}
+
+.selector-camara label,
+.form-resena label {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.selector-camara select,
+.form-resena select,
+.form-resena textarea {
+  padding: 0.7rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 1rem;
+  color: #1f2937;
+  background-color: #ffffff;
+}
+
+.selector-camara select:focus,
+.form-resena select:focus,
+.form-resena textarea:focus {
+  outline: none;
+  border-color: #1a1a2e;
+}
+
+.estado {
+  color: #1a1a2e;
+  font-style: italic;
+}
+
+.promedio {
+  background-color: #ffffff;
+  border-left: 4px solid #e94560;
+  padding: 0.8rem 1rem;
+  border-radius: 0.4rem;
+  margin-bottom: 1.2rem;
+}
+
+.alerta-error {
+  background-color: #fee2e2;
+  color: #b91c1c;
+  border: 1px solid #b91c1c;
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.alerta-exito {
+  background-color: #dcfce7;
+  color: #166534;
+  border: 1px solid #166534;
+  padding: 0.8rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.alerta-info {
+  background-color: #f4f6f8;
+  color: #1a1a2e;
+  padding: 0.6rem 1rem;
+  border-radius: 0.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+
+.form-resena {
+  background-color: #ffffff;
+  border-radius: 0.8rem;
+  padding: 1.5rem;
+  margin-top: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.form-resena h3 {
+  color: #1a1a2e;
+  margin-bottom: 0.4rem;
+}
+
+.error-campo {
+  color: #b91c1c;
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.form-resena button {
+  margin-top: 0.8rem;
+  background-color: #1a1a2e;
+  color: #ffffff;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.8rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-resena button:hover:not(:disabled) {
+  background-color: #e94560;
+}
+
+.form-resena button:disabled {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
