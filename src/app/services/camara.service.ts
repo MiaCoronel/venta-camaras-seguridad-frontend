@@ -2,17 +2,14 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Camara } from '../models/camara';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CamaraService {
   private http = inject(HttpClient);
-  
-  // La URL final dependerá de lo que configure el Integrante 1 (Core)
-  private apiUrl = 'http://localhost:8080/api/camaras'; 
-
-  // --- ESTÁNDAR DE SERVICES OBLIGATORIO ---
+  private apiUrl = `${environment.apiUrl}/camaras`;
 
   obtenerTodos(): Observable<Camara[]> {
     return this.http.get<Camara[]>(this.apiUrl);
