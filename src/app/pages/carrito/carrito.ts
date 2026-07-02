@@ -56,6 +56,9 @@ export class Carrito implements OnInit {
   }
 
   onVaciar(): void {
-    this.carritoService.vaciar();
+    this.carritoService.vaciarCarrito().subscribe({
+      next: () => this.carritoService.vaciar(),
+      error: (err) => console.error('Error al vaciar carrito:', err)
+    });
   }
 }

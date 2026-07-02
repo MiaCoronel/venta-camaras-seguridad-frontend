@@ -21,7 +21,7 @@
       }
 
       <h2>{{ cam.nombre }}</h2>
-      <p class="precio">{{ cam.precio | currency:'PEN':'symbol':'1.2-2' }}</p>
+      <p class="precio">{{ cam.precio | currency:'PEN ':'symbol':'1.2-2' }}</p>
       <p class="descripcion">{{ cam.descripcion }}</p>
 
       @if (cam.stock > 0) {

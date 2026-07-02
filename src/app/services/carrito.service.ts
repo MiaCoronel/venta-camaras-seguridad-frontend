@@ -1,13 +1,13 @@
 import { Injectable, inject, signal, computed } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable, of } from 'rxjs';
 import { Carrito } from '../models/carrito';
 import { environment } from '../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class CarritoService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/carrito`;
+  private apiUrl = `${environment.apiUrl}/api/carrito`;
 
   private _carrito = signal<Carrito | null>(null);
   carrito = this._carrito.asReadonly();
@@ -19,10 +19,11 @@ export class CarritoService {
   items = computed(() => this._carrito()?.items ?? []);
 
   agregar(camaraId: number, cantidad: number): Observable<Carrito> {
-    return this.http.post<Carrito>(
-      `${this.apiUrl}/agregar?camaraId=${camaraId}&cantidad=${cantidad}`,
-      {}
-    );
+    const params = new HttpParams()
+      .set('camaraId', camaraId)
+      .set('cantidad', cantidad);
+
+    return this.http.post<Carrito>(`${this.apiUrl}/agregar`, {}, { params });
   }
 
   obtenerCarrito(): Observable<Carrito> {
@@ -33,11 +34,34 @@ export class CarritoService {
     return this.http.delete<Carrito>(`${this.apiUrl}/item/${itemId}`);
   }
 
+  incrementarItem(itemId: number): Observable<Carrito> {
+    return this.http.post<Carrito>(`${this.apiUrl}/item/${itemId}/incrementar`, {});
+  }
+
+  decrementarItem(itemId: number): Observable<Carrito> {
+    return this.http.post<Carrito>(`${this.apiUrl}/item/${itemId}/decrementar`, {});
+  }
+
   actualizarCantidad(itemId: number, cantidad: number): Observable<Carrito> {
-    return this.http.put<Carrito>(
-      `${this.apiUrl}/item/${itemId}?cantidad=${cantidad}`,
-      {}
-    );
+    const item = this._carrito()?.items.find((i) => i.id === itemId);
+
+    if (!item) {
+      return this.incrementarItem(itemId);
+    }
+
+    if (cantidad > item.cantidad) {
+      return this.incrementarItem(itemId);
+    }
+
+    if (cantidad < item.cantidad) {
+      return this.decrementarItem(itemId);
+    }
+
+    return of(this._carrito() as Carrito);
+  }
+
+  vaciarCarrito(): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/vaciar`);
   }
 
   setCarrito(carrito: Carrito): void {

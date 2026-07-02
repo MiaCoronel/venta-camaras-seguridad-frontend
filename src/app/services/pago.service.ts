@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class PagoService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/pagos`;
+  private apiUrl = `${environment.apiUrl}/api/pagos`;
 
   obtenerTodos(): Observable<Pago[]> {
     return this.http.get<Pago[]>(this.apiUrl);

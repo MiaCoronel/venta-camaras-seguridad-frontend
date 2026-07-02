@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class CamaraService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/camaras`;
+  private apiUrl = `${environment.apiUrl}/api/camaras`;
 
   obtenerTodos(): Observable<Camara[]> {
     return this.http.get<Camara[]>(this.apiUrl);
