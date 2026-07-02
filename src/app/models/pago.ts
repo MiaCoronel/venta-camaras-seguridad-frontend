@@ -1,6 +1,13 @@
-export interface Pago {
-  ordenId: number | null;
-  metodo: string | null;
-  monto: number | null;
-  observacion?: string | null; 
+export interface Pago{
+
+    id?:number;
+
+    ordenId:number;
+
+    metodo:string;
+
+    monto:number;
+
+    observacion?:string;
+
 }

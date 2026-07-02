@@ -1,9 +1,8 @@
 <section class="contenedor">
   <h1>Registrar Pago</h1>
 
-  <a routerLink="/carrito" class="btn-volver">← Volver a carrito</a>
-
-  <form [formGroup]="formulario" (ngSubmit)="registrarPago()">
+    <form [formGroup]="formulario"
+          (ngSubmit)="registrarPago()">
 
     <label>Número de Orden</label>
     <input type="number" formControlName="ordenId" />

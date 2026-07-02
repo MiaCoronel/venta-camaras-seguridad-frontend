@@ -7,7 +7,8 @@ import { environment } from '../../environments/environment';
 @Injectable({ providedIn: 'root' })
 export class OrdenService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/ordenes`;
+
+  private readonly apiUrl = 'http://localhost:8080/api/ordenes';
 
   obtenerTodos(): Observable<Orden[]> {
     return this.http.get<Orden[]>(this.apiUrl);
