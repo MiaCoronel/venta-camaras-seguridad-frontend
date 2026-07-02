@@ -2,15 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Pago } from '../models/pago';
+import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class PagoService {
-
   private http = inject(HttpClient);
-
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  private apiUrl = `${environment.apiUrl}/pagos`;
 
   obtenerTodos(): Observable<Pago[]> {
     return this.http.get<Pago[]>(this.apiUrl);
@@ -31,5 +28,4 @@ export class PagoService {
   eliminar(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
-
 }

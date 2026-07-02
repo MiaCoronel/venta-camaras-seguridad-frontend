@@ -1,79 +1,50 @@
-<div class="contenedor">
+<section class="contenedor">
+  <h1>Mis Órdenes</h1>
 
-    <h1>Órdenes Registradas</h1>
+  @if (loading()) {
+    <p class="loading">Cargando órdenes...</p>
+  }
 
-    @if (loading()) {
+  @if (error()) {
+    <p class="error">{{ error() }}</p>
+  }
 
-        <p class="loading">
-            Cargando órdenes...
-        </p>
-
+  @if (!loading() && !error()) {
+    @if (ordenes().length > 0) {
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Cliente</th>
+            <th>Fecha</th>
+            <th>Estado</th>
+            <th>Total</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (orden of ordenes(); track orden.id) {
+            <tr>
+              <td>{{ orden.id }}</td>
+              <td>{{ orden.cliente }}</td>
+              <td>{{ orden.fecha | date:'dd/MM/yyyy' }}</td>
+              <td>
+                <span [class]="'estado-' + orden.estado.toLowerCase()">
+                  {{ orden.estado }}
+                </span>
+              </td>
+              <td>S/ {{ orden.total | number:'1.2-2' }}</td>
+              <td>
+                <a [routerLink]="['/pagos']" class="btn-pagar">Pagar</a>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    } @else {
+      <div class="sin-datos">
+        No existen órdenes registradas.
+      </div>
     }
-
-    @if (error()) {
-
-        <p class="error">
-            {{ error() }}
-        </p>
-
-    }
-
-    @if (!loading() && ordenes().length > 0) {
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>ID</th>
-
-                    <th>Cliente</th>
-
-                    <th>Fecha</th>
-
-                    <th>Estado</th>
-
-                    <th>Total</th>
-
-                </tr>
-
-            </thead>
-
-            <tbody>
-
-                @for (orden of ordenes(); track orden.id) {
-
-                    <tr>
-
-                        <td>{{ orden.id }}</td>
-
-                        <td>{{ orden.cliente }}</td>
-
-                        <td>{{ orden.fecha }}</td>
-
-                        <td>{{ orden.estado }}</td>
-
-                        <td>S/. {{ orden.total }}</td>
-
-                    </tr>
-
-                }
-
-            </tbody>
-
-        </table>
-
-    }
-
-    @if (!loading() && ordenes().length === 0) {
-
-        <div class="sin-datos">
-
-            No existen órdenes registradas.
-
-        </div>
-
-    }
-
-</div>
+  }
+</section>

@@ -2,15 +2,12 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Orden } from '../models/orden';
+import { environment } from '../../environments/environment';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class OrdenService {
-
   private http = inject(HttpClient);
-
-  private readonly apiUrl = 'http://localhost:8080/api/ordenes';
+  private apiUrl = `${environment.apiUrl}/ordenes`;
 
   obtenerTodos(): Observable<Orden[]> {
     return this.http.get<Orden[]>(this.apiUrl);
