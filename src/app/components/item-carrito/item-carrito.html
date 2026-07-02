@@ -1,1 +1,23 @@
-<p>item-carrito works!</p>
+<div class="item-carrito">
+  <div class="item-info">
+    @if (item.camara.imagenes && item.camara.imagenes.length > 0) {
+      <img [src]="item.camara.imagenes[0].url" [alt]="item.camara.nombre" class="item-imagen" />
+    }
+    <div>
+      <h4>{{ item.camara.nombre }}</h4>
+      <p class="item-precio">S/ {{ item.precioUnitario | number:'1.2-2' }}</p>
+    </div>
+  </div>
+
+  <div class="item-controles">
+    <button (click)="onDisminuir()" class="btn-cantidad">-</button>
+    <span class="cantidad">{{ item.cantidad }}</span>
+    <button (click)="onAumentar()" class="btn-cantidad">+</button>
+  </div>
+
+  <div class="item-subtotal">
+    <p>S/ {{ item.subtotal | number:'1.2-2' }}</p>
+  </div>
+
+  <button (click)="onEliminar()" class="btn-eliminar">🗑️</button>
+</div>
