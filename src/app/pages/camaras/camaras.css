@@ -1,0 +1,78 @@
+.detalle {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+}
+
+.detalle h2 {
+  color: #1a1a2e;
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.detalle img {
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 0.8rem;
+  margin-bottom: 1.5rem;
+}
+
+.precio {
+  color: #e94560;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.descripcion {
+  color: #444;
+  font-size: 1rem;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.stock {
+  color: #166534;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+}
+
+.stock.agotado {
+  color: #b91c1c;
+}
+
+.btn-carrito {
+  background-color: #e94560;
+  color: white;
+  border: none;
+  border-radius: 0.5rem;
+  padding: 0.8rem 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.btn-carrito:hover {
+  background-color: #c73652;
+}
+
+.btn-volver {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  color: #1a1a2e;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.btn-volver:hover {
+  color: #e94560;
+}
+
+.alerta-error {
+  color: #b91c1c;
+  background: #fde8e7;
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
