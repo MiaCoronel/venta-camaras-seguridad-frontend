@@ -1,1 +1,79 @@
-<p>ordenes works!</p>
+<div class="contenedor">
+
+    <h1>Órdenes Registradas</h1>
+
+    @if (loading()) {
+
+        <p class="loading">
+            Cargando órdenes...
+        </p>
+
+    }
+
+    @if (error()) {
+
+        <p class="error">
+            {{ error() }}
+        </p>
+
+    }
+
+    @if (!loading() && ordenes().length > 0) {
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>ID</th>
+
+                    <th>Cliente</th>
+
+                    <th>Fecha</th>
+
+                    <th>Estado</th>
+
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                @for (orden of ordenes(); track orden.id) {
+
+                    <tr>
+
+                        <td>{{ orden.id }}</td>
+
+                        <td>{{ orden.cliente }}</td>
+
+                        <td>{{ orden.fecha }}</td>
+
+                        <td>{{ orden.estado }}</td>
+
+                        <td>S/. {{ orden.total }}</td>
+
+                    </tr>
+
+                }
+
+            </tbody>
+
+        </table>
+
+    }
+
+    @if (!loading() && ordenes().length === 0) {
+
+        <div class="sin-datos">
+
+            No existen órdenes registradas.
+
+        </div>
+
+    }
+
+</div>

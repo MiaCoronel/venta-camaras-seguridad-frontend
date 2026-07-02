@@ -1,1 +1,149 @@
-<p>pagos works!</p>
+<div class="contenedor">
+
+    <h1>Registrar Pago</h1>
+
+    <form [formGroup]="formulario"
+          (ngSubmit)="registrarPago()">
+
+        <label>
+
+            Número de Orden
+
+        </label>
+
+        <input
+            type="number"
+            formControlName="ordenId">
+
+        @if(formulario.controls.ordenId.touched &&
+            formulario.controls.ordenId.invalid){
+
+            <small>
+
+                Debe ingresar una orden.
+
+            </small>
+
+        }
+
+        <label>
+
+            Método de Pago
+
+        </label>
+
+        <select formControlName="metodo">
+
+            <option value="">Seleccione</option>
+
+            <option value="Tarjeta">
+
+                Tarjeta
+
+            </option>
+
+            <option value="Yape">
+
+                Yape
+
+            </option>
+
+            <option value="Plin">
+
+                Plin
+
+            </option>
+
+            <option value="Transferencia">
+
+                Transferencia
+
+            </option>
+
+        </select>
+
+        @if(formulario.controls.metodo.touched &&
+            formulario.controls.metodo.invalid){
+
+            <small>
+
+                Seleccione un método.
+
+            </small>
+
+        }
+
+        <label>
+
+            Monto
+
+        </label>
+
+        <input
+            type="number"
+            formControlName="monto">
+
+        @if(formulario.controls.monto.touched &&
+            formulario.controls.monto.invalid){
+
+            <small>
+
+                El monto debe ser mayor a cero.
+
+            </small>
+
+        }
+
+        <label>
+
+            Observación
+
+        </label>
+
+        <textarea
+            rows="4"
+            formControlName="observacion">
+
+        </textarea>
+
+        <button
+            type="submit"
+            [disabled]="formulario.invalid || loading()">
+
+            Registrar Pago
+
+        </button>
+
+    </form>
+
+    @if(loading()){
+
+        <p class="loading">
+
+            Registrando pago...
+
+        </p>
+
+    }
+
+    @if(error()){
+
+        <p class="error">
+
+            {{ error() }}
+
+        </p>
+
+    }
+
+    @if(exito()){
+
+        <p class="success">
+
+            {{ exito() }}
+
+        </p>
+
+    }
+
+</div>
