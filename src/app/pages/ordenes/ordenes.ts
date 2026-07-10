@@ -1,40 +1,62 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { DatePipe, DecimalPipe } from '@angular/common';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Component, inject, signal } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+
 import { OrdenService } from '../../services/orden.service';
 import { Orden } from '../../models/orden';
 
 @Component({
   selector: 'app-ordenes',
-  standalone: true,
-  imports: [RouterLink, DatePipe, DecimalPipe],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './ordenes.html',
   styleUrl: './ordenes.css'
 })
-export class Ordenes implements OnInit {
+export class Ordenes {
+
+  private fb = inject(FormBuilder);
   private ordenService = inject(OrdenService);
 
-  ordenes = signal<Orden[]>([]);
   loading = signal(false);
   error = signal('');
+  exito = signal('');
 
-  ngOnInit(): void {
-    this.cargarOrdenes();
-  }
+  orden = signal<Orden | null>(null);
 
-  cargarOrdenes(): void {
+  formulario = this.fb.group({
+    metodo: ['', Validators.required]
+  });
+
+  realizarCheckout() {
+
+    if (this.formulario.invalid) {
+      this.formulario.markAllAsTouched();
+      return;
+    }
+
     this.loading.set(true);
     this.error.set('');
+    this.exito.set('');
 
-    this.ordenService.obtenerTodos().subscribe({
-      next: (data: Orden[]) => {
-        this.ordenes.set(data);
+    const metodo = this.formulario.value.metodo!;
+
+    this.ordenService.checkout(metodo).subscribe({
+      next: (orden) => {
+
+        this.orden.set(orden);
+
+        this.exito.set(
+          'Compra realizada correctamente'
+        );
+
         this.loading.set(false);
       },
-      error: (err: HttpErrorResponse) => {
-        console.error('Error al cargar órdenes:', err.message);
-        this.error.set('No fue posible cargar las órdenes.');
+
+      error: (err) => {
+
+        this.error.set(
+          err.error || 'Error al realizar checkout'
+        );
+
         this.loading.set(false);
       }
     });

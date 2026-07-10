@@ -1,14 +1,21 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Pago } from '../models/pago';
 import { environment } from '../../environments/environment';
+import { Pago } from '../models/pago';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class PagoService {
-  private http = inject(HttpClient);
 
-  private apiUrl = 'http://localhost:8080/api/pagos';
+  private http = inject(HttpClient);
+<<<<<<< HEAD
+
+  private apiUrl = `${environment.apiUrl}/pagos`;
+=======
+  private apiUrl = `${environment.apiUrl}/api/pagos`;
+>>>>>>> 04a6cd4 (feat: carrito completo con backend, item-carrito component, detalle-camara actualizado)
 
   obtenerTodos(): Observable<Pago[]> {
     return this.http.get<Pago[]>(this.apiUrl);
@@ -18,15 +25,20 @@ export class PagoService {
     return this.http.get<Pago>(`${this.apiUrl}/${id}`);
   }
 
-  crear(pago: Pago): Observable<Pago> {
-    return this.http.post<Pago>(this.apiUrl, pago);
+  obtenerPorOrden(ordenId: number): Observable<Pago> {
+    return this.http.get<Pago>(
+      `${this.apiUrl}/orden/${ordenId}`
+    );
   }
 
-  actualizar(id: number, pago: Pago): Observable<Pago> {
-    return this.http.put<Pago>(`${this.apiUrl}/${id}`, pago);
-  }
+  buscarPorEstadoYMonto(
+    estado: string,
+    montoMinimo: number
+  ): Observable<Pago[]> {
 
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.get<Pago[]>(
+      `${this.apiUrl}/buscar?estado=${estado}&montoMinimo=${montoMinimo}`
+    );
+
   }
 }

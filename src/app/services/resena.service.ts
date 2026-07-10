@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class ResenaService {
   private http = inject(HttpClient);
-  private apiUrl = `${environment.apiUrl}/api/resenas`;
+  private apiUrl = `${environment.apiUrl}/resenas`;
 
   // --- ESTÁNDAR DE SERVICES OBLIGATORIO ---
   // El backend expone las reseñas siempre asociadas a una cámara,

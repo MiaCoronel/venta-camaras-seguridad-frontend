@@ -1,50 +1,82 @@
 <section class="contenedor">
-  <h1>Mis Órdenes</h1>
+
+  <h2>Finalizar Compra</h2>
+
+  <form
+    [formGroup]="formulario"
+    (ngSubmit)="realizarCheckout()">
+
+    <label>Método de pago</label>
+
+    <select formControlName="metodo">
+
+      <option value="">Seleccione</option>
+
+      <option value="Yape">Yape</option>
+
+      <option value="Plin">Plin</option>
+
+      <option value="Tarjeta">Tarjeta</option>
+
+      <option value="Transferencia">
+        Transferencia
+      </option>
+
+    </select>
+
+    @if (
+      formulario.controls.metodo.invalid &&
+      formulario.controls.metodo.touched
+    ) {
+
+      <small>
+        Debe seleccionar un método de pago
+      </small>
+
+    }
+
+    <button
+      type="submit"
+      [disabled]="formulario.invalid || loading()">
+
+      Realizar Checkout
+
+    </button>
+
+  </form>
 
   @if (loading()) {
-    <p class="loading">Cargando órdenes...</p>
+
+    <p>Cargando...</p>
+
   }
 
   @if (error()) {
-    <p class="error">{{ error() }}</p>
+
+    <p>{{ error() }}</p>
+
   }
 
-  @if (!loading() && !error()) {
-    @if (ordenes().length > 0) {
-      <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Cliente</th>
-            <th>Fecha</th>
-            <th>Estado</th>
-            <th>Total</th>
-            <th>Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          @for (orden of ordenes(); track orden.id) {
-            <tr>
-              <td>{{ orden.id }}</td>
-              <td>{{ orden.cliente }}</td>
-              <td>{{ orden.fecha | date:'dd/MM/yyyy' }}</td>
-              <td>
-                <span [class]="'estado-' + orden.estado.toLowerCase()">
-                  {{ orden.estado }}
-                </span>
-              </td>
-              <td>S/ {{ orden.total | number:'1.2-2' }}</td>
-              <td>
-                <a [routerLink]="['/pagos']" class="btn-pagar">Pagar</a>
-              </td>
-            </tr>
-          }
-        </tbody>
-      </table>
-    } @else {
-      <div class="sin-datos">
-        No existen órdenes registradas.
-      </div>
-    }
+  @if (exito()) {
+
+    <p>{{ exito() }}</p>
+
   }
+
+  @if (orden()) {
+
+    <div class="resultado">
+
+      <h3>Orden generada</h3>
+
+      <p>ID: {{ orden()?.id }}</p>
+
+      <p>Total: S/ {{ orden()?.total }}</p>
+
+      <p>Estado: {{ orden()?.estado }}</p>
+
+    </div>
+
+  }
+
 </section>

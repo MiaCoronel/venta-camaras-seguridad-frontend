@@ -1,52 +1,101 @@
 <section class="contenedor">
-  <h1>Registrar Pago</h1>
+<section class="contenedor">
 
-    <form [formGroup]="formulario"
-          (ngSubmit)="registrarPago()">
+<<<<<<< HEAD
+  <h2>Consulta de Pagos</h2>
+=======
+  <a routerLink="/carrito" class="btn-volver">← Volver a carrito</a>
+>>>>>>> 04a6cd4 (feat: carrito completo con backend, item-carrito component, detalle-camara actualizado)
 
-    <label>Número de Orden</label>
-    <input type="number" formControlName="ordenId" />
-    @if (formulario.controls.ordenId.touched && formulario.controls.ordenId.invalid) {
-      <small>Debe ingresar un número de orden válido.</small>
-    }
+  <form
+    [formGroup]="formulario"
+    (ngSubmit)="buscar()">
 
-    <label>Método de Pago</label>
-    <select formControlName="metodo">
-      <option value="">Seleccione</option>
-      <option value="Tarjeta">Tarjeta</option>
-      <option value="Yape">Yape</option>
-      <option value="Plin">Plin</option>
-      <option value="Transferencia">Transferencia</option>
+    <label>Estado</label>
+
+    <select formControlName="estado">
+
+      <option value="APROBADO">
+        APROBADO
+      </option>
+
+      <option value="PENDIENTE">
+        PENDIENTE
+      </option>
+
+      <option value="RECHAZADO">
+        RECHAZADO
+      </option>
+
     </select>
-    @if (formulario.controls.metodo.touched && formulario.controls.metodo.invalid) {
-      <small>Seleccione un método de pago.</small>
-    }
 
-    <label>Monto</label>
-    <input type="number" formControlName="monto" step="0.01" />
-    @if (formulario.controls.monto.touched && formulario.controls.monto.invalid) {
-      <small>El monto debe ser mayor a cero.</small>
-    }
+    <label>Monto mínimo</label>
 
-    <label>Observación (opcional)</label>
-    <textarea rows="4" formControlName="observacion"></textarea>
+    <input
+      type="number"
+      formControlName="montoMinimo">
 
-    <button type="submit" [disabled]="formulario.invalid || loading()">
-      @if (loading()) {
-        Registrando...
-      } @else {
-        Registrar Pago
-      }
+    <button
+      type="submit"
+      [disabled]="loading()">
+
+      Buscar
+
     </button>
 
   </form>
 
-  @if (error()) {
-    <p class="error">{{ error() }}</p>
+  @if (loading()) {
+
+    <p>Cargando pagos...</p>
+
   }
 
-  @if (exito()) {
-    <p class="success">{{ exito() }}</p>
+  @if (error()) {
+
+    <p>{{ error() }}</p>
+
+  }
+
+  @if (!loading() && pagos().length > 0) {
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>ID</th>
+          <th>Monto</th>
+          <th>Método</th>
+          <th>Estado</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        @for (pago of pagos(); track pago.id) {
+
+          <tr>
+
+            <td>{{ pago.id }}</td>
+
+            <td>
+              S/ {{ pago.monto | number:'1.2-2' }}
+            </td>
+
+            <td>{{ pago.metodo }}</td>
+
+            <td>{{ pago.estado }}</td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
   }
 
 </section>

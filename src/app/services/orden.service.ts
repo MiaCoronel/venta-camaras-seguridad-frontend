@@ -1,32 +1,28 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Orden } from '../models/orden';
 import { environment } from '../../environments/environment';
+import { Orden } from '../models/orden';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root'
+})
 export class OrdenService {
+
   private http = inject(HttpClient);
+<<<<<<< HEAD
 
-  private readonly apiUrl = 'http://localhost:8080/api/ordenes';
+  private apiUrl = `${environment.apiUrl}/ordenes`;
+=======
+  private apiUrl = `${environment.apiUrl}/api/ordendetalle-camara actualizado)es`;
+>>>>>>> 04a6cd4 (feat: carrito completo con backend, item-carrito component, 
 
-  obtenerTodos(): Observable<Orden[]> {
-    return this.http.get<Orden[]>(this.apiUrl);
-  }
+  checkout(metodo: string): Observable<Orden> {
 
-  obtenerPorId(id: number): Observable<Orden> {
-    return this.http.get<Orden>(`${this.apiUrl}/${id}`);
-  }
+    return this.http.post<Orden>(
+      `${this.apiUrl}/checkout?metodo=${metodo}`,
+      {}
+    );
 
-  crear(orden: Orden): Observable<Orden> {
-    return this.http.post<Orden>(this.apiUrl, orden);
-  }
-
-  actualizar(id: number, orden: Orden): Observable<Orden> {
-    return this.http.put<Orden>(`${this.apiUrl}/${id}`, orden);
-  }
-
-  eliminar(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 }
