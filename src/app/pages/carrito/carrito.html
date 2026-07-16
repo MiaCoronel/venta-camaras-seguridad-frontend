@@ -1,0 +1,88 @@
+<section class="carrito-page">
+  <header class="carrito-hero">
+    <div>
+      <span class="eyebrow">Carrito y checkout</span>
+      <h2>🛒 Mi carrito de compra</h2>
+      <p>
+        Revisa tus productos, registra tu cliente si aún no existe y completa una simulación de pago antes
+        de guardar la compra en tu historial.
+      </p>
+    </div>
+    <a routerLink="/camaras" class="btn-seguir">Ver más cámaras</a>
+  </header>
+
+  @if (loading()) {
+    <p class="estado">Cargando carrito...</p>
+  }
+
+  @if (error()) {
+    <p class="alerta-error">{{ error() }}</p>
+  }
+
+  @if (exito()) {
+    <p class="alerta-exito">{{ exito() }}</p>
+  }
+
+  @if (!loading() && !error()) {
+    @if (items().length === 0) {
+      <div class="carrito-vacio">
+        <p>Tu carrito está vacío.</p>
+        <a routerLink="/camaras" class="btn-seguir">Ver cámaras</a>
+      </div>
+    } @else {
+      <div class="carrito-contenido">
+        <div class="lista-items">
+          @for (item of items(); track item.id) {
+            <app-item-carrito
+              [item]="item"
+              (eliminar)="onEliminar($event)"
+              (actualizar)="onActualizar($event)" />
+          }
+        </div>
+
+        <div class="resumen">
+          <h3>Resumen del pedido</h3>
+          <p>Productos: <strong>{{ cantidad() }}</strong></p>
+          <p class="total">Total: <strong>S/ {{ total() | number:'1.2-2' }}</strong></p>
+
+          <div class="cliente-bloque">
+            @if (cliente()) {
+              <p class="cliente-info">Cliente: <strong>{{ cliente()?.nombre }}</strong></p>
+              <p class="cliente-info secundario">{{ cliente()?.email }}</p>
+            } @else {
+              <h4>No tienes datos de cliente registrados</h4>
+              <p>Antes de proceder con la compra debes registrar tus datos. Pulsa el botón para completar tu perfil.</p>
+              <a routerLink="/perfil" class="btn-seguir">Registrar datos del cliente</a>
+            }
+          </div>
+
+          <div class="metodo-pago">
+            <h4>Método de pago simulado</h4>
+            <p class="metodo-resumen">
+              {{ metodoInfo[metodoPagoForm.value.metodo ?? 'tarjeta'].description }}
+            </p>
+            <form [formGroup]="metodoPagoForm" class="metodo-grid">
+              <label><input type="radio" value="tarjeta" formControlName="metodo" /> Tarjeta</label>
+              <label><input type="radio" value="yape" formControlName="metodo" /> Yape</label>
+              <label><input type="radio" value="efectivo" formControlName="metodo" /> Efectivo</label>
+            </form>
+            @if (procesandoPago()) {
+              <div class="simulacion-box">
+                <span class="spinner"></span>
+                <div>
+                  <strong>Procesando pago...</strong>
+                  <p>Validando medio de pago, registrando orden y guardando tu compra.</p>
+                </div>
+              </div>
+            }
+          </div>
+
+          <button (click)="onVaciar()" class="btn-vaciar">Vaciar carrito</button>
+          <button (click)="procesarPago()" class="btn-pagar" [disabled]="procesandoPago()">
+            {{ procesandoPago() ? 'Procesando...' : 'Proceder al pago' }}
+          </button>
+        </div>
+      </div>
+    }
+  }
+</section>

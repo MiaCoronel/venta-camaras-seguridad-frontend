@@ -1,0 +1,14 @@
+<section class="historial-page">
+  <header class="historial-hero"><div><span class="eyebrow">Mis pedidos</span><h1>Sigue el avance de tus compras.</h1><p>Los estados se sincronizan con la gestión del proveedor.</p></div><div class="hero-actions"><button type="button" class="btn-refresh" (click)="cargarHistorial()">Actualizar estado</button><a routerLink="/camaras" class="btn-primary">Seguir comprando</a></div></header>
+  @if(error()){<p class="alerta-error">{{error()}}</p>}
+  @if(loading()){<p class="estado">Actualizando pedidos...</p>}
+  @else if(historial().length===0){<div class="empty-state"><span>⌁</span><h2>Aún no tienes compras</h2><p>Cuando completes una orden podrás seguirla desde aquí.</p><a routerLink="/camaras" class="btn-primary">Explorar cámaras</a></div>}
+  @else{<div class="historial-grid">@for(compra of historial();track compra.id){
+    <article class="compra-card"><div class="compra-top"><div><span class="meta">Orden #{{compra.id}}</span><h2>{{compra.fechaCreacion|date:'mediumDate'}}</h2></div><span class="badge" [class.cancelled]="estaCancelada(compra.estado)">{{compra.estado}}</span></div>
+      @if(estaCancelada(compra.estado)){<div class="cancelado"><strong>Pedido cancelado</strong><span>Esta orden fue cancelada por el proveedor. Contáctanos si necesitas más información.</span></div>}
+      @else{<div class="seguimiento"><div class="linea"><span [style.width.%]="progreso(compra.estado)"></span></div><div class="pasos">@for(estado of estados;track estado.codigo;let i=$index){<div class="paso" [class.activo]="estaAlcanzado(compra.estado,i)" [class.actual]="esActual(compra.estado,estado.codigo)"><span>{{i+1}}</span><strong>{{estado.titulo}}</strong><p>{{estado.descripcion}}</p></div>}</div></div>}
+      <div class="items-list">@for(item of compra.items;track item.id){<div class="item-row"><div><strong>{{item.nombre}}</strong><p>S/ {{item.precioUnitario|number:'1.2-2'}} × {{item.cantidad}}</p></div><strong>S/ {{item.subtotal|number:'1.2-2'}}</strong></div>}</div>
+      <footer class="compra-footer"><div><small>Total pagado</small><strong>S/ {{compra.total|number:'1.2-2'}}</strong></div><a class="contactar" [href]="whatsappUrl(compra)" target="_blank" rel="noopener noreferrer">Contactar por WhatsApp</a></footer>
+    </article>}
+  </div>}
+</section>

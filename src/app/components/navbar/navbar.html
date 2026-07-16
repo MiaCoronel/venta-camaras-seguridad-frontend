@@ -1,0 +1,31 @@
+<nav class="navbar">
+  <div class="navbar-inner">
+    <a routerLink="/" class="marca" (click)="cerrarMenu()"><span class="logo-icon"><i></i></span><span><strong>CamShop</strong><small>Seguridad inteligente</small></span></a>
+    <button class="menu-button" type="button" (click)="alternarMenu()" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+
+    <div class="menu" [class.abierto]="menuAbierto()">
+      <div class="enlaces">
+        <a routerLink="/" routerLinkActive="activo" [routerLinkActiveOptions]="{ exact: true }" (click)="cerrarMenu()">Inicio</a>
+        @if (auth.isLogged() && auth.isAdmin()) {
+          <a routerLink="/admin" routerLinkActive="activo" (click)="cerrarMenu()">Administración</a>
+        } @else {
+          <a routerLink="/camaras" routerLinkActive="activo" (click)="cerrarMenu()">Cámaras</a>
+          <a routerLink="/resenas" routerLinkActive="activo" (click)="cerrarMenu()">Reseñas</a>
+          @if (auth.isLogged()) {
+            <a routerLink="/carrito" routerLinkActive="activo" (click)="cerrarMenu()">Carrito</a>
+            <a routerLink="/historial" routerLinkActive="activo" (click)="cerrarMenu()">Mis pedidos</a>
+          }
+        }
+      </div>
+      <div class="cuenta">
+        @if (auth.isLogged()) {
+          <a routerLink="/perfil" class="usuario" (click)="cerrarMenu()"><span>{{ auth.getDisplayName().charAt(0).toUpperCase() }}</span><div><small>Mi cuenta</small><strong>{{ auth.getDisplayName() }}</strong></div></a>
+          <button type="button" class="logout" (click)="logout()">Salir</button>
+        } @else {
+          <a routerLink="/login" class="login" (click)="cerrarMenu()">Ingresar</a>
+          <a routerLink="/registro" class="registro" (click)="cerrarMenu()">Crear cuenta</a>
+        }
+      </div>
+    </div>
+  </div>
+</nav>

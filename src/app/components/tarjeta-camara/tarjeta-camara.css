@@ -1,0 +1,157 @@
+:host {
+  --color-primary: #1a1a2e;
+  --color-white: #ffffff;
+  --color-accent: #e94560;
+  --color-text: #516072;
+  --shadow: 0 22px 60px rgba(26, 26, 46, 0.12);
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.tarjeta {
+  background: var(--color-white);
+  border-radius: 1.4rem;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  border: 1px solid rgba(26, 26, 46, 0.08);
+}
+
+.tarjeta:hover {
+  transform: translateY(-6px);
+  border-color: rgba(233, 69, 96, 0.24);
+}
+
+.tarjeta-media {
+  position: relative;
+  background: linear-gradient(180deg, rgba(26, 26, 46, 0.04), rgba(26, 26, 46, 0.01));
+}
+
+.tarjeta img,
+.placeholder-imagen {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+}
+
+.placeholder-imagen {
+  display: grid;
+  place-items: center;
+  gap: 0.35rem;
+  color: #93a0b2;
+  background:
+    radial-gradient(circle at top, rgba(233, 69, 96, 0.07), transparent 30%),
+    linear-gradient(180deg, rgba(26, 26, 46, 0.03), rgba(26, 26, 46, 0.01));
+  font-weight: 700;
+}
+
+.placeholder-imagen span {
+  font-size: 2.5rem;
+}
+
+.badges {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  backdrop-filter: blur(10px);
+}
+
+.badge-brand {
+  background: rgba(26, 26, 46, 0.84);
+  color: #fff;
+}
+
+.badge-resolution {
+  background: rgba(233, 69, 96, 0.9);
+  color: #fff;
+}
+
+.tarjeta-body {
+  display: grid;
+  gap: 0.85rem;
+  padding: 1.3rem;
+}
+
+.tarjeta h3 {
+  color: var(--color-primary);
+  font-size: 1.2rem;
+  margin: 0;
+}
+
+.modelo {
+  margin: 0;
+  color: #7a8597;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.descripcion {
+  color: var(--color-text);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.resumen {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-top: 0.35rem;
+}
+
+.precio {
+  color: var(--color-accent);
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.stock {
+  color: #166534;
+  font-size: 0.9rem;
+  font-weight: 700;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: rgba(22, 101, 52, 0.1);
+}
+
+.stock.agotado {
+  color: #b91c1c;
+  background: rgba(185, 28, 28, 0.12);
+}
+
+.tarjeta button {
+  background-color: var(--color-primary);
+  color: var(--color-white);
+  border: none;
+  border-radius: 999px;
+  padding: 0.95rem 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.25rem;
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.tarjeta button:hover {
+  background-color: var(--color-accent);
+  transform: translateY(-1px);
+}

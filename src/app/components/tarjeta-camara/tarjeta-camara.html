@@ -1,0 +1,30 @@
+<article class="tarjeta">
+  <div class="tarjeta-media">
+    @if (imagenPrincipal(); as imagen) {
+      <img [src]="imagen.url" [alt]="camara().nombre" />
+    } @else {
+      <div class="placeholder-imagen">
+        <span>📷</span>
+        <p>Sin imagen principal</p>
+      </div>
+    }
+
+    <div class="badges">
+      <span class="badge badge-brand">{{ camara().marca }}</span>
+      <span class="badge badge-resolution">{{ camara().resolucion }}</span>
+    </div>
+  </div>
+
+  <div class="tarjeta-body">
+    <p class="modelo">{{ camara().modelo }}</p>
+    <h3>{{ camara().nombre }}</h3>
+    <p class="descripcion">{{ descripcionCorta() }}</p>
+
+    <div class="resumen">
+      <span class="precio">{{ camara().precio | currency:'PEN ':'symbol':'1.0-2' }}</span>
+      <span class="stock" [class.agotado]="camara().stock <= 0">{{ etiquetaStock() }}</span>
+    </div>
+
+    <button [routerLink]="['/camaras', camara().id]">Ver detalle</button>
+  </div>
+</article>

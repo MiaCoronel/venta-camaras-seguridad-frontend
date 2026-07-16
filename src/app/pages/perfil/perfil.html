@@ -1,0 +1,36 @@
+<section class="perfil-page">
+  <header class="perfil-hero">
+    <div><span class="eyebrow">Mi cuenta</span><h1>Datos del cliente</h1><p>Administra tus datos de contacto y facturación para agilizar tus próximas compras.</p></div>
+    <a routerLink="/camaras" class="btn-seguir">Seguir comprando</a>
+  </header>
+
+  @if (error()) { <p class="alerta-error">{{ error() }}</p> }
+
+  <div class="perfil-grid">
+    <aside class="resumen-card">
+      <span class="avatar">{{ (cliente()?.nombre || 'U').charAt(0).toUpperCase() }}</span>
+      <h2>{{ cliente()?.nombre || 'Usuario' }}</h2>
+      <p>{{ cliente()?.email || 'Completa tus datos de cliente' }}</p>
+      <div class="perfil-status"><span></span>{{ cliente() ? 'Perfil registrado' : 'Perfil pendiente' }}</div>
+    </aside>
+
+    <div class="card">
+      <div class="card-heading"><span>Información personal</span><h2>{{ cliente() ? 'Actualiza tus datos' : 'Completa tu perfil' }}</h2><p>Esta información se vinculará con tus pedidos.</p></div>
+      <form [formGroup]="clienteForm" (ngSubmit)="guardar()" class="form-perfil">
+        <label><span>Nombre completo</span><input formControlName="nombre" placeholder="Ej. María Pérez" /></label>
+        <label><span>Correo electrónico</span><input formControlName="email" placeholder="correo@ejemplo.com" /></label>
+        <div class="two-columns">
+          <label><span>Teléfono</span><input formControlName="telefono" placeholder="999 999 999" /></label>
+          <label><span>DNI</span><input formControlName="dni" inputmode="numeric" maxlength="8" placeholder="8 dígitos" />
+            @if (clienteForm.get('dni')?.touched && clienteForm.get('dni')?.invalid) { <small>Ingresa exactamente 8 dígitos.</small> }
+          </label>
+        </div>
+        <label><span>RUC (opcional)</span><input formControlName="ruc" inputmode="numeric" maxlength="11" placeholder="11 dígitos" />
+          @if (clienteForm.get('ruc')?.touched && clienteForm.get('ruc')?.invalid) { <small>Ingresa exactamente 11 dígitos.</small> }
+        </label>
+        <label><span>Dirección</span><input formControlName="direccion" placeholder="Dirección de entrega" /></label>
+        <button type="submit" [disabled]="loading()">{{ loading() ? 'Guardando...' : 'Guardar cambios' }}</button>
+      </form>
+    </div>
+  </div>
+</section>

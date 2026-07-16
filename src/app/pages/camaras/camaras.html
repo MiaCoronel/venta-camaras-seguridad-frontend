@@ -1,0 +1,16 @@
+<section class="contenedor">
+  <header class="catalogo-hero"><div><span class="eyebrow">Catálogo de videovigilancia</span><h1>Encuentra la cámara ideal para cada espacio.</h1><p>Compara equipos para interior, exterior y soluciones PTZ con stock actualizado.</p></div><div class="hero-chip"><strong>Compra segura</strong><span>Pago simulado · Control de pedidos</span></div></header>
+  <form class="filtros" [formGroup]="filtros" (ngSubmit)="cargarCatalogo()">
+    <label><span>Marca</span><input formControlName="marca" placeholder="Ej. Hikvision" /></label>
+    <label><span>Categoría</span><select formControlName="categoriaId"><option [ngValue]="null">Todas</option>@for(categoria of categorias();track categoria.id){<option [ngValue]="categoria.id">{{ categoria.nombre }}</option>}</select></label>
+    <label><span>Precio mínimo</span><input type="number" min="0" formControlName="precioMin" placeholder="S/ 0" /></label>
+    <label><span>Precio máximo</span><input type="number" min="0" formControlName="precioMax" placeholder="S/ 9999" /></label>
+    <label class="stock-check"><input type="checkbox" formControlName="soloStock" /><span>Solo con stock</span></label>
+    <div class="filter-actions"><button type="submit">Buscar</button><button type="button" class="limpiar" (click)="limpiar()">Limpiar</button></div>
+  </form>
+  <div class="result-heading"><div><span>Productos disponibles</span><h2>{{ camaras().length }} cámaras encontradas</h2></div></div>
+  @if(loading()){<div class="estado"><span class="spinner"></span>Cargando catálogo...</div>}
+  @if(error()){<p class="alerta-error">{{ error() }}</p>}
+  @if(!loading()&&!error()&&camaras().length===0){<div class="empty-state"><h2>No encontramos resultados</h2><p>Prueba con otros filtros de marca, categoría o precio.</p><button (click)="limpiar()">Ver todo el catálogo</button></div>}
+  @if(!loading()&&!error()&&camaras().length>0){<div class="grid">@for(camara of camaras();track camara.id){<app-tarjeta-camara [camara]="camara" />}</div>}
+</section>

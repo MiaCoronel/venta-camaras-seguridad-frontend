@@ -1,0 +1,97 @@
+<section class="contenedor">
+
+  <a routerLink="/carrito" class="btn-volver">← Volver a carrito</a>
+  <h2>Consulta de Pagos</h2>
+
+  <form
+    [formGroup]="formulario"
+    (ngSubmit)="buscar()">
+
+    <label>Estado</label>
+
+    <select formControlName="estado">
+
+      <option value="APROBADO">
+        APROBADO
+      </option>
+
+      <option value="PENDIENTE">
+        PENDIENTE
+      </option>
+
+      <option value="RECHAZADO">
+        RECHAZADO
+      </option>
+
+    </select>
+
+    <label>Monto mínimo</label>
+
+    <input
+      type="number"
+      formControlName="montoMinimo">
+
+    <button
+      type="submit"
+      [disabled]="loading()">
+
+      Buscar
+
+    </button>
+
+  </form>
+
+  @if (loading()) {
+
+    <p>Cargando pagos...</p>
+
+  }
+
+  @if (error()) {
+
+    <p>{{ error() }}</p>
+
+  }
+
+  @if (!loading() && pagos().length > 0) {
+
+    <table>
+
+      <thead>
+
+        <tr>
+          <th>ID</th>
+          <th>Monto</th>
+          <th>Método</th>
+          <th>Estado</th>
+        </tr>
+
+      </thead>
+
+      <tbody>
+
+        @for (pago of pagos(); track pago.id) {
+
+          <tr>
+
+            <td>{{ pago.id }}</td>
+
+            <td>
+              S/ {{ pago.monto | number:'1.2-2' }}
+            </td>
+
+            <td>{{ pago.metodo }}</td>
+
+            <td>{{ pago.estado }}</td>
+
+          </tr>
+
+        }
+
+      </tbody>
+
+    </table>
+
+  }
+
+</section>

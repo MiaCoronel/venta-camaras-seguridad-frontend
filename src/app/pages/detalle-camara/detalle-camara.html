@@ -1,0 +1,101 @@
+<section class="detalle">
+
+  @if (loading()) {
+    <div class="estado estado-loading">
+      <span class="spinner"></span>
+      <p>Cargando información...</p>
+    </div>
+  }
+
+  @if (error()) {
+    <p class="alerta-error">{{ error() }}</p>
+  }
+
+  @if (mensajeExito()) {
+    <p class="alerta-exito">{{ mensajeExito() }}</p>
+  }
+
+  @if (camara(); as cam) {
+    <div class="detalle-layout">
+      <div class="detalle-media">
+        <a routerLink="/camaras" class="btn-volver">← Volver al catálogo</a>
+
+        <div class="imagen-principal">
+          @if (imagenActual(); as imagen) {
+            <img [src]="imagen.url" [alt]="cam.nombre" class="detalle-imagen" />
+          } @else {
+            <img [src]="placeholderImagen()" [alt]="cam.nombre" class="detalle-imagen" />
+          }
+
+          <div class="badges-top">
+            <span class="badge badge-brand">{{ cam.marca }}</span>
+            <span class="badge badge-resolution">{{ cam.resolucion }}</span>
+            <span class="badge badge-stock" [class.agotado]="cam.stock <= 0">{{ etiquetaStock(cam.stock) }}</span>
+          </div>
+        </div>
+
+        @if (imagenes().length > 1) {
+          <div class="galeria-thumbs">
+            @for (imagen of imagenes(); track imagen.id) {
+              <button
+                type="button"
+                class="thumb"
+                [class.activa]="imagenActual()?.id === imagen.id"
+                (click)="seleccionarImagen(imagen)">
+                <img [src]="imagen.url" [alt]="cam.nombre + ' miniatura ' + imagen.id" />
+              </button>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="detalle-card">
+        <p class="kicker">Cámara de seguridad profesional</p>
+        <h2>{{ cam.nombre }}</h2>
+        <p class="subtitulo">{{ cam.marca }} · {{ cam.modelo }} · {{ cam.resolucion }}</p>
+
+        <p class="precio">{{ cam.precio | currency:'PEN ':'symbol':'1.2-2' }}</p>
+        <p class="descripcion">{{ descripcionResumen(cam) }}</p>
+
+        <div class="specs">
+          <article>
+            <span>Marca</span>
+            <strong>{{ cam.marca }}</strong>
+          </article>
+          <article>
+            <span>Modelo</span>
+            <strong>{{ cam.modelo }}</strong>
+          </article>
+          <article>
+            <span>Resolución</span>
+            <strong>{{ cam.resolucion }}</strong>
+          </article>
+          <article>
+            <span>Stock</span>
+            <strong>{{ cam.stock }}</strong>
+          </article>
+        </div>
+
+        <div class="beneficios">
+          <div>
+            <strong>Visión clara</strong>
+            <p>Ideal para interiores y exteriores con lectura nítida de cada escena.</p>
+          </div>
+          <div>
+            <strong>Compra simple</strong>
+            <p>Agrega al carrito en un clic y continúa con una experiencia de compra directa.</p>
+          </div>
+        </div>
+
+        @if (cam.stock > 0) {
+          <button (click)="agregarAlCarrito()" class="btn-carrito">
+            🛒 Agregar al carrito
+          </button>
+        } @else {
+          <p class="agotado">Producto agotado</p>
+        }
+      </div>
+    </div>
+  }
+
+</section>

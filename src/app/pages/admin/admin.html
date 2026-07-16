@@ -1,0 +1,100 @@
+<main class="admin-shell">
+  <header class="topbar">
+    <div><span class="eyebrow">CamShop / Administración</span><h1>Operaciones de la tienda</h1><p>Catálogo, inventario, cuentas y pedidos desde un único espacio.</p></div>
+    <a routerLink="/camaras">Abrir tienda ↗</a>
+  </header>
+
+  <section class="metrics">
+    <article><span>Productos activos</span><strong>{{ activas() }}</strong></article>
+    <article><span>Unidades disponibles</span><strong>{{ stockTotal() }}</strong></article>
+    <article><span>Agotados</span><strong>{{ agotadas() }}</strong></article>
+    <article><span>Pedidos</span><strong>{{ ordenes().length }}</strong></article>
+  </section>
+
+  <nav class="module-nav" aria-label="Módulos administrativos">
+    <button [class.active]="modulo() === 'dashboard'" (click)="seleccionar('dashboard')">Reportes</button>
+    <button [class.active]="modulo() === 'catalogo'" (click)="seleccionar('catalogo')">Catálogo</button>
+    <button [class.active]="modulo() === 'categorias'" (click)="seleccionar('categorias')">Categorías</button>
+    <button [class.active]="modulo() === 'inventario'" (click)="seleccionar('inventario')">Inventario</button>
+    <button [class.active]="modulo() === 'imagenes'" (click)="seleccionar('imagenes')">Imágenes</button>
+    <button [class.active]="modulo() === 'usuarios'" (click)="seleccionar('usuarios')">Usuarios</button>
+    <button [class.active]="modulo() === 'pedidos'" (click)="seleccionar('pedidos')">Pedidos</button>
+  </nav>
+
+  @if (loading()) { <p class="notice">Cargando datos...</p> }
+  @if (error()) { <p class="notice error">{{ error() }}</p> }
+  @if (exito()) { <p class="notice success">{{ exito() }}</p> }
+
+  @if (modulo() === 'dashboard' && dashboard(); as d) {
+    <section class="dashboard-grid">
+      <article class="report-card accent"><span>Ingresos confirmados</span><strong>S/ {{ d.ingresos | number:'1.2-2' }}</strong><p>Ventas no canceladas</p></article>
+      <article class="report-card"><span>Ticket promedio</span><strong>S/ {{ d.ticketPromedio | number:'1.2-2' }}</strong><p>Promedio por pedido</p></article>
+      <article class="report-card"><span>Usuarios</span><strong>{{ d.usuarios }}</strong><p>Cuentas registradas</p></article>
+      <article class="report-card"><span>Inventario</span><strong>{{ d.unidadesStock }}</strong><p>Unidades disponibles</p></article>
+      <article class="panel sales-chart">
+        <div class="panel-title"><div><span>Rendimiento</span><h2>Cámaras más vendidas</h2></div></div>
+        @for (p of d.masVendidas; track p.camaraId) {
+          <div class="bar-row"><div><strong>{{ p.nombre }}</strong><small>{{ p.unidades }} unidades · S/ {{ p.ingresos | number:'1.2-2' }}</small></div><div class="bar-track"><span [style.width.%]="p.unidades / maxVentas() * 100"></span></div></div>
+        } @empty { <p class="empty">Los productos más vendidos aparecerán después de registrar compras.</p> }
+      </article>
+      <article class="panel status-report"><div class="panel-title"><div><span>Operaciones</span><h2>Pedidos por estado</h2></div></div>
+        @for (estado of d.pedidosPorEstado | keyvalue; track estado.key) { <div><span>{{ estado.key }}</span><strong>{{ estado.value }}</strong></div> } @empty { <p class="empty">Sin pedidos registrados.</p> }
+      </article>
+    </section>
+  }
+
+  @if (modulo() === 'catalogo') {
+    <section class="module-grid catalog-layout">
+      <article class="panel form-panel">
+        <div class="panel-title"><div><span>Producto</span><h2>{{ editandoCamaraId() ? 'Editar cámara' : 'Nueva cámara' }}</h2></div>@if (editandoCamaraId()) { <button class="ghost" (click)="cancelarEdicionCamara()">Cancelar</button> }</div>
+        <form [formGroup]="camaraForm" (ngSubmit)="guardarCamara()" class="form-grid">
+          <label>Nombre comercial<input formControlName="nombre" placeholder="Cámara Domo 4K"></label>
+          <label>Marca<input formControlName="marca" placeholder="Hikvision"></label>
+          <label>Modelo<input formControlName="modelo" placeholder="DS-2CD..."></label>
+          <label>Resolución<input formControlName="resolucion" placeholder="4K / 1080p"></label>
+          <label>Precio (S/)<input type="number" step="0.01" formControlName="precio"></label>
+          <label>Stock inicial<input type="number" formControlName="stock"></label>
+          <label class="wide">Categoría<select formControlName="categoriaId"><option [ngValue]="null">Sin categoría</option>@for (cat of categorias(); track cat.id) { @if (cat.activo !== false) { <option [ngValue]="cat.id">{{ cat.nombre }}</option> } }</select></label>
+          <label class="wide">Especificaciones / descripción<textarea rows="4" formControlName="descripcion" placeholder="Visión nocturna, IP66, conectividad..."></textarea></label>
+          <button class="primary wide" type="submit">{{ editandoCamaraId() ? 'Actualizar producto' : 'Registrar producto' }}</button>
+        </form>
+      </article>
+
+      <section class="product-list">
+        @for (c of camaras(); track c.id) {
+          <article class="product-row" [class.inactive]="c.activo === false">
+            <img [src]="c.imagenes?.[0]?.url || placeholder" [alt]="c.nombre">
+            <div class="product-info"><div class="badges"><span>{{ c.categoria?.nombre || 'Sin categoría' }}</span><span [class.out]="c.stock === 0">{{ c.stock === 0 ? 'Agotada' : c.stock + ' en stock' }}</span>@if (c.activo === false) { <span class="off">Baja</span> }</div><h3>{{ c.nombre }}</h3><p>{{ c.marca }} · {{ c.modelo }} · {{ c.resolucion }}</p><strong>S/ {{ c.precio | number:'1.2-2' }}</strong></div>
+            <div class="row-actions"><button (click)="editarCamara(c)">Editar</button><button [class.restore]="c.activo === false" class="danger" (click)="cambiarEstadoCamara(c)">{{ c.activo === false ? 'Reactivar' : 'Dar de baja' }}</button></div>
+          </article>
+        } @empty { <div class="empty">No hay cámaras registradas.</div> }
+      </section>
+    </section>
+  }
+
+  @if (modulo() === 'categorias') {
+    <section class="module-grid two-cols">
+      <article class="panel"><div class="panel-title"><div><span>Clasificación</span><h2>{{ editandoCategoriaId() ? 'Editar categoría' : 'Nueva categoría' }}</h2></div></div><form [formGroup]="categoriaForm" (ngSubmit)="guardarCategoria()" class="stack-form"><label>Nombre<input formControlName="nombre" placeholder="Exterior, Interior, PTZ..."></label><label>Descripción<textarea rows="4" formControlName="descripcion"></textarea></label><button class="primary">Guardar categoría</button>@if(editandoCategoriaId()){<button type="button" class="ghost" (click)="cancelarCategoria()">Cancelar</button>}</form></article>
+      <article class="panel"><div class="panel-title"><div><span>Tipos disponibles</span><h2>Categorías</h2></div></div><div class="category-list">@for (cat of categorias(); track cat.id) { <div [class.inactive]="cat.activo === false"><div><strong>{{ cat.nombre }}</strong><p>{{ cat.descripcion || 'Sin descripción' }}</p></div><div><button (click)="editarCategoria(cat)">Editar</button><button class="danger" (click)="cambiarEstadoCategoria(cat)">{{ cat.activo === false ? 'Activar' : 'Desactivar' }}</button></div></div> } @empty { <p class="empty">Crea la primera categoría.</p> }</div></article>
+    </section>
+  }
+
+  @if (modulo() === 'inventario') {
+    <section class="panel"><div class="panel-title"><div><span>Existencias</span><h2>Control de inventario</h2></div><p>Registra lotes nuevos o marca un producto agotado.</p></div><div class="table-wrap"><table><thead><tr><th>Producto</th><th>Estado</th><th>Stock actual</th><th>Entrada de lote</th><th>Acciones</th></tr></thead><tbody>@for (c of camaras(); track c.id) { <tr [class.muted]="c.activo === false"><td><strong>{{ c.nombre }}</strong><small>{{ c.modelo }}</small></td><td><span class="status" [class.red]="c.stock === 0">{{ c.stock === 0 ? 'Agotado' : 'Disponible' }}</span></td><td class="stock-number">{{ c.stock }}</td><td><input #lote type="number" min="1" placeholder="Cantidad"><button (click)="registrarEntrada(c.id, lote.value)">Registrar</button></td><td><button class="danger" [disabled]="c.stock === 0" (click)="marcarAgotada(c.id)">Marcar agotado</button></td></tr> }</tbody></table></div></section>
+  }
+
+  @if (modulo() === 'imagenes') {
+    <section class="module-grid two-cols image-layout">
+      <article class="panel"><div class="panel-title"><div><span>Archivo local</span><h2>Subir imagen</h2></div></div><form [formGroup]="imagenForm" (ngSubmit)="subirImagen()" class="stack-form"><label>Cámara<select formControlName="camaraId"><option [ngValue]="0">Selecciona un producto</option>@for(c of camaras(); track c.id){<option [ngValue]="c.id">{{ c.nombre }}</option>}</select></label><label>Archivo<input type="file" accept="image/png,image/jpeg,image/webp,image/gif" (change)="seleccionarArchivo($event)"></label><label>Orden<input type="number" min="1" formControlName="numImagen"></label><label class="check"><input type="checkbox" formControlName="esPrincipal"> Usar como imagen principal</label><small>Formatos JPG, PNG, WebP o GIF. Máximo 5 MB.</small><button class="primary">Subir imagen</button></form></article>
+      <article class="panel gallery-panel"><div class="panel-title"><div><span>Biblioteca</span><h2>Imágenes por cámara</h2></div></div>@for(c of camaras(); track c.id){ @if((c.imagenes?.length || 0) > 0){<h3 class="camera-label">{{ c.nombre }}</h3><div class="gallery">@for(img of c.imagenes || []; track img.id){<figure [class.main]="img.esPrincipal"><img [src]="img.url" [alt]="c.nombre"><figcaption><span>{{ img.esPrincipal ? 'Principal' : '#' + img.numImagen }}</span><div>@if(!img.esPrincipal){<button (click)="principal(img.id)">Principal</button>}<button class="danger" (click)="eliminarImagen(img.id)">Quitar</button></div></figcaption></figure>}</div>} } @empty {<p class="empty">No hay imágenes cargadas.</p>}</article>
+    </section>
+  }
+
+  @if (modulo() === 'usuarios') {
+    <section class="panel"><div class="panel-title"><div><span>Accesos</span><h2>Usuarios y clientes</h2></div><p>{{ usuarios().length }} cuentas registradas</p></div><div class="table-wrap"><table><thead><tr><th>Usuario</th><th>Cliente</th><th>Rol</th><th>Cuenta</th><th>Acción</th></tr></thead><tbody>@for(u of usuarios(); track u.id){<tr><td><strong>{{ u.username }}</strong></td><td>{{ clienteDe(u.id)?.nombre || 'Perfil incompleto' }}</td><td><select [value]="u.roles?.[0] || 'CLIENTE'" (change)="cambiarRol(u, $event)"><option>CLIENTE</option><option>VENDEDOR</option><option>ADMIN</option></select></td><td><span class="status" [class.red]="!u.enabled">{{ u.enabled ? 'Activa' : 'Deshabilitada' }}</span></td><td><button [class.danger]="u.enabled" (click)="cambiarEstadoUsuario(u)">{{ u.enabled ? 'Desactivar' : 'Activar' }}</button></td></tr>}</tbody></table></div></section>
+  }
+
+  @if (modulo() === 'pedidos') {
+    <section class="panel"><div class="panel-title"><div><span>Ventas</span><h2>Pedidos realizados</h2></div><p>Actualiza el avance de cada entrega.</p></div><div class="table-wrap"><table><thead><tr><th>Pedido</th><th>Fecha</th><th>Productos</th><th>Total</th><th>Pago</th><th>Estado</th></tr></thead><tbody>@for(o of ordenes(); track o.id){<tr><td><strong>#{{ o.id }}</strong></td><td>{{ o.fechaCreacion | date:'short' }}</td><td>{{ o.items.length || 0 }}</td><td>S/ {{ o.total | number:'1.2-2' }}</td><td>{{ o.pago?.metodo || '—' }} · {{ o.pago?.estado || '—' }}</td><td><select [value]="o.estado" (change)="cambiarEstadoPedido(o, $event)"><option>PENDIENTE</option><option>PAGADO</option><option>PROCESANDO</option><option>ENVIADO</option><option>ENTREGADO</option><option>CANCELADO</option></select></td></tr>} @empty {<tr><td colspan="6" class="empty">Todavía no hay pedidos.</td></tr>}</tbody></table></div></section>
+  }
+</main>
